@@ -14,14 +14,14 @@
 		}
 	};
 
-	exports.design2 = {
+	exports.designDocumentName = {
 		views: {
-			view1: {
+			viewName: {
 				map: function () { }
 			}
 		},
 		filters: {
-			filter1: function() {}
+			filterName: function() {}
 		}
 	};
 
