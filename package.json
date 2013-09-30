@@ -8,5 +8,8 @@
   },
   "repository": "",
   "author": "@stevegreatrex",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+    "nano": "~4.1.3"
+  }
 }
