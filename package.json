@@ -2,7 +2,7 @@
   "name": "view-builder",
   "version": "0.0.0",
   "description": "Builds views for couch db",
-  "main": "app.js",
+  "main": "builder.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
