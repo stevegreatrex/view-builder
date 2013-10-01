@@ -2,11 +2,15 @@
 
 A node utility to create and update couchdb views
 
+## Installation
+
+    npm install -g view-builder
+
 ## Usage
 
 ### Command Line
 
-    node builder.js "http://localhost:5984/databasename" "./path/to/views.js"
+    view-builder "http://localhost:5984/databasename" "./path/to/views.js"
 
 If omitted, the second parameter will default to a file named `views.js` in the current folder.
 
@@ -27,7 +31,7 @@ The config file can contain multiple design documents, each of which can contain
 
 ### require
 
-    var builder = require("./builder.js");
+    var builder = require("view-builder");
     builder("http://localhost:5984/databasename", "./path/to/views.js");
     // or...
     builder("http://localhost:5984/databasename", {

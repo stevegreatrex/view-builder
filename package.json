@@ -1,15 +1,16 @@
 {
   "name": "view-builder",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "description": "Builds views for couch db",
   "main": "builder.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": "",
+  "repository": "https://github.com/stevegreatrex/view-builder.git",
   "author": "@stevegreatrex",
   "license": "BSD",
   "dependencies": {
     "nano": "~4.1.3"
-  }
+  },
+  "bin": {
+    "view-builder" : "builder-cmd.js"
+  },
+  "preferGlobal": true
 }

@@ -5,11 +5,6 @@
 
 	var nano = require("nano");
 	module.exports = processDesignDocuments
-	
-	//are we calling directly?  if so, run immediately
-	if (require.main === module) {
-		processDesignDocuments(process.argv[2], process.argv[3] || "./views.js");
-	}
 
 	/**
 	* Processes the design documents specified against the
@@ -21,10 +16,16 @@
 	* @param done				The callback to be invoked on complection
 	*/
 	function processDesignDocuments(dbUrl, designDocuments, done) {
-		var db = nano(dbUrl);
-
 		done = done || function () { };
-		designDocuments = designDocuments || "./views.js";
+		designDocuments = designDocuments || (process.cwd() + "/views.js");
+
+		try {
+			var db = nano(dbUrl);
+		} catch (err) {
+			console.log("Error connecting to database: " + dbUrl);
+			done(err);
+		}
+
 		var docs = createDocumentQueue(designDocuments);
 
 		console.log("Found " + docs.length + " design documents");
@@ -66,8 +67,6 @@
 	function updateDesignDocument(db, name, design, done) {
 		var designDocUrl = "_design/" + name;
 
-		console.log("Processing " + name);
-
 		db.get(designDocUrl, function (err, body) {
 
 			//quit on error unless it's a 404 - then we want to create the doc
@@ -82,7 +81,7 @@
 
 
 			if (!containsChanges(body, design)) {
-				console.log("No changes; skipping " + name);
+				console.log(name + ": no changes; skipping " + name);
 				done();
 				return;
 			}
@@ -93,7 +92,7 @@
 				}
 			}
 
-			console.log("Updating " + name);
+			console.log(name + ": changes found; updating...");
 			db.insert(body, designDocUrl, onInsertComplete(name, done));
 		});
 	}
@@ -106,9 +105,7 @@
 	*/
 	function onInsertComplete(name, done) {
 		return function (err, body) {
-			if (!err) {
-				console.log(name + " updated successfully");
-			} else {
+			if (err) {
 				console.log(err);
 			}
 			done(err, body);
@@ -172,7 +169,12 @@
 	function createDocumentQueue(designDocuments) {
 		if (typeof (designDocuments) === "string") {
 			console.log("Loading " + designDocuments);
-			designDocuments = require(designDocuments);
+			try {
+				designDocuments = require(designDocuments);
+			} catch (err) {
+				console.log("Error loading design document definitions file: " + designDocuments);
+				throw err;
+			}
 		}
 
 		var docs = [];
