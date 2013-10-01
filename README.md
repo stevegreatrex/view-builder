@@ -6,9 +6,11 @@ A node utility to create and update couchdb views
 
 ### Command Line
 
-    node builder.js "http://localhost:5984/databasename" "./path/to/config.js"
+    node builder.js "http://localhost:5984/databasename" "./path/to/views.js"
 
-This relies on `config.js` containing something like the following:
+If omitted, the second parameter will default to a file named `views.js` in the current folder.
+
+This relies on `views.js` containing something like the following:
 
     exports.designDocumentName = {
         views: {
@@ -26,7 +28,7 @@ The config file can contain multiple design documents, each of which can contain
 ### require
 
     var builder = require("./builder.js");
-    builder("http://localhost:5984/databasename", "./path/to/config.js");
+    builder("http://localhost:5984/databasename", "./path/to/views.js");
     // or...
     builder("http://localhost:5984/databasename", {
         designDocumentName = {
@@ -40,3 +42,5 @@ The config file can contain multiple design documents, each of which can contain
             }
         }
     });
+
+As in the command line example, the second parameter will default to a file named `views.js` in the current folder.
