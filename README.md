@@ -10,7 +10,7 @@ A node utility to create and update couchdb views
 
 ### Command Line
 
-    view-builder "http://localhost:5984/databasename" "./path/to/views.js"
+    view-builder http://localhost:5984/databasename ./path/to/views.js
 
 If omitted, the second parameter will default to a file named `views.js` in the current folder.
 
