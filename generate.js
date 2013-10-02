@@ -46,7 +46,7 @@
 	}
 
 	function generateScript(body) {
-		var script = "/*global exports:true*/\n\n" +
+		var script = "/*global exports:true, emit:false*/\n\n" +
 				"(function(exports) {\n" +
 				"    \"use strict\";";
 
