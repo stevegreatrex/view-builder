@@ -1,15 +1,11 @@
 ﻿#!/usr/bin/env node
 
 (function(require) {
-	var url = process.argv[2],
-		viewFile = process.argv[3];
+	var args = require("optimist").argv;
 
-	for (var i = 0; i < process.argv.length; i++) {
-		if (process.argv[i].toLowerCase() === "--generate") {
-			require("./generate.js")(url, viewFile);
-			return;
-		}
+	if ("generate" in args){
+		require("./generate.js")(args.url, args.defs);
+	} else {
+		require("./builder.js")(args.url, args.defs);
 	}
-	
-	require("./builder.js")(url, viewFile);
 }(require));

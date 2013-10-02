@@ -8,11 +8,12 @@ A node utility to create and update couchdb views
 
 ## Usage
 
-### Command Line
+### Command Line (Update)
+Updates the views found in the specified database from the specified definitions
 
-    view-builder http://localhost:5984/databasename ./path/to/views.js
+    view-builder --url http://localhost:5984/databasename --defs ./path/to/views.js
 
-If omitted, the second parameter will default to a file named `views.js` in the current folder.
+If omitted, the `defs` parameter will default to a file named `views.js` in the current folder.
 
 This relies on `views.js` containing something like the following:
 
@@ -28,6 +29,13 @@ This relies on `views.js` containing something like the following:
     };
 
 The config file can contain multiple design documents, each of which can contain multiple views and filters.
+
+### Command Line (Generate)
+Generates a view definition file based on the views already in the database
+
+    view-builder --url http://localhost:5984/databasename --defs ./path/to/views.js --generate
+
+If omitted, the `defs` parameter will default to a file named `views.js` in the current folder.
 
 ### require
 
