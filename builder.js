@@ -156,7 +156,7 @@
 				return value.toString();
 			}
 			return value;
-		});
+		}).replace(/\s/g, ""); //ignore whitespace changes
 	}
 
 	/**
