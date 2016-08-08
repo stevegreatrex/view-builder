@@ -6,6 +6,6 @@
 	if ("generate" in args){
 		require("./generate.js")(args.url, args.defs);
 	} else {
-		require("./builder.js")(args.url, args.defs);
+		require("./builder.js")(args.url, args.defs, args.force);
 	}
 }(require));
