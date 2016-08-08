@@ -13,9 +13,10 @@
 	* @param dbUrl				A URL representing the database into which design documents should be passed
 	* @param designDocuments	Either an object representing the design documents, or the string module name
 	*							containing the design document definitions. 
+	* @param force			Forces the builder to overwrite existing views
 	* @param done				The callback to be invoked on complection
 	*/
-	function processDesignDocuments(dbUrl, designDocuments, done) {
+	function processDesignDocuments(dbUrl, designDocuments, force, done) {
 		done = done || function () { };
 		designDocuments = designDocuments || (process.cwd() + "/views.js");
 
@@ -32,7 +33,7 @@
 
 		if (docs.length) {
 			var doc = docs.pop();
-			updateDesignDocument(db, doc.name, doc.design, processNextDoc);
+			updateDesignDocument(db, doc.name, doc.design, force, processNextDoc);
 		} else {
 			done();
 		}
@@ -48,7 +49,7 @@
 
 			if (docs.length) {
 				var doc = docs.pop();
-				updateDesignDocument(db, doc.name, doc.design, processNextDoc);
+				updateDesignDocument(db, doc.name, doc.design, force, processNextDoc);
 			} else {
 				console.log("All design documents processed");
 				done();
@@ -62,15 +63,18 @@
 	* @param db The nano instance to be used for updates
 	* @param name The name of the design document
 	* @param design The design document content
+	* @param force Flag to indicate that existing documents should be overwritten.
 	* @param done The callback to be invoked on complection
 	*/
-	function updateDesignDocument(db, name, design, done) {
+	function updateDesignDocument(db, name, design, force, done) {
 		var designDocUrl = "_design/" + name;
 
 		db.get(designDocUrl, function (err, body) {
 
+			var docMissing = isMissingDoc(err);
+			
 			//quit on error unless it's a 404 - then we want to create the doc
-			if (err && !isMissingDoc(err)) {
+			if (err && !docMissing) {
 				console.log(err);
 				done(err);
 				return;
@@ -79,9 +83,16 @@
 			//make sure we have *some* document content
 			body = body || {};
 
-
 			if (!containsChanges(body, design)) {
 				console.log(name + ": no changes; skipping " + name);
+				done();
+				return;
+			}
+
+			//if there are changes but the doc already exists, skip it and show a warning
+			//(unless --force has been set)
+			if (!docMissing && !force) {
+				console.log(name + ": already exists; skipping " + name + ".  Use --force to overwrite existing views");
 				done();
 				return;
 			}
@@ -141,7 +152,7 @@
 	* @returns true if the error represents a missing design document
 	*/
 	function isMissingDoc(err) {
-		return err.status_code === 404;
+		return err && err.status_code === 404;
 	}
 
 	/**

@@ -30,6 +30,11 @@ This relies on `views.js` containing something like the following:
 
 The config file can contain multiple design documents, each of which can contain multiple views and filters.
 
+### Updating Existing documents
+To avoid accidental rebuilds of entire views, `view-builder` will not automatically overwrite an existing design document (see [#1](https://github.com/stevegreatrex/view-builder/issues/1)).  If this behaviour is required then you can use the `force` flag:
+
+    view-builder --url http://... --force
+
 ### Command Line (Generate)
 Generates a view definition file based on the views already in the database
 
